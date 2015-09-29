@@ -1,6 +1,6 @@
 best <- function(state, outcome) {
     ## Read outcome data
-    data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+    data <- read.csv("outcome-of-care-measures.csv", colClasses = "character", na.strings = "Not Available")
     
     ## Read in the function variables and take care of other setup
     chosenState <- state
