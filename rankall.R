@@ -8,6 +8,7 @@ rankall <- function(outcome, num = "best") {
     uniqueStates <- unique(data$State)
     sortedStates <- uniqueStates[order(uniqueStates)]
     columnNumbers <- c(1, 2, 7, 11, 17, 23)
+    dfOutput <- data.frame(hospital = character(), state = character())
     
     ## Split the list by state for rankings
     fullStateList <- split(data, data$State)
@@ -35,11 +36,25 @@ rankall <- function(outcome, num = "best") {
         ## Get the ranking that is to be returned
         if (num == "best") ranking <- 1
         else if (num == "worst") ranking <- nrow(sortedOutcomeList)
-        else if (num > nrow(sortedOutcomeList)) return(NA)
+        else if (num > nrow(sortedOutcomeList)) ranking <- -1
         else ranking <- num
         
         ## Return hospital name
-        print(c(as.character(sortedOutcomeList$Hospital.Name[ranking]), chosenState))
+        if (ranking < 1) {
+            hospitalName <- NA
+        }
+        else {
+            hospitalName <- as.character(sortedOutcomeList$Hospital.Name[ranking])
+        }
+        
+        newData <- data.frame(hospital = hospitalName, state = chosenState, row.names = chosenState)
+        if (nrow(dfOutput) == 0) {
+            dfOutput <- newData
+        }
+        else {
+            dfOutput <- rbind(dfOutput, newData)
+        }
     }
     
+    dfOutput
 }
